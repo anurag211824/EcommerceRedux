@@ -4,12 +4,13 @@ import {
 } from "@paypal/react-paypal-js";
 import PropTypes from "prop-types";
 
+
 const PayPalButton = ({amount,onSuccess,onError}) => {
   return (
     <PayPalScriptProvider
       options={{
         "client-id":
-          "AXqNXvD2jL-6zhvPFE4wd9vAIB38kCtKOONNNZFP3O4CnLWs0sJs4wd0Vot3PWmeIz2MAC8MkThzH_aA",
+          import.meta.env.VITE_PAYPAL_CLIENT_ID,
       }}
     >
 
