@@ -3,7 +3,8 @@ import cors from "cors"        // Importing CORS middleware to allow cross-origi
 import dotenv from "dotenv"   // Importing dotenv to load environment variables from a .env file
 const app = express();         // Creating an instance of an Express application
 import connectDb from "./config/db.js";
-import userRoutes from "./routes/userRoutes.js"
+import userRoutes from "./routes/UserRoutes.js"
+import productRoutes from "./routes/ProductRoutes.js"
 app.use(express.json()) // Middleware to parse incoming JSON requests and make the data available in req.body
 app.use(cors()) // Middleware to enable Cross-Origin Resource Sharing (CORS), allowing frontend apps from different origins to access the backend
 dotenv.config()
@@ -15,6 +16,7 @@ app.get('/',(req,res)=>{
 })
 //API Routes
 app.use('/api/users',userRoutes)
+app.use('/api/products',productRoutes)
 app.listen(PORT,()=>{
     console.log(`Sever is Running on ${PORT}`); 
 })
