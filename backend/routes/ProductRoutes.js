@@ -43,8 +43,6 @@ router.get("/best-seller",getBestSeller)
 // @access Public
 router.get("/new-arrivals",getNewArrivals)
 
-
-
 // @route GET /api/products/:id
 // @description Get a single product by Id from Data base
 // @access Public
