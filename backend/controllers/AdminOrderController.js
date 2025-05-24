@@ -45,4 +45,4 @@ const deleteOrderById = async (req, res) => {
   }
 };
 
-export { getAdminOrders ,updateOrderById,deleteOrderById };
+export { getAdminOrders, updateOrderById, deleteOrderById };
