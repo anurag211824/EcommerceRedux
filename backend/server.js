@@ -7,6 +7,12 @@ import userRoutes from "./routes/UserRoutes.js";
 import productRoutes from "./routes/ProductRoutes.js";
 import cartRoutes from "./routes/CartRoutes.js";
 import checkoutRoutes from "./routes/CheckOutRoutes.js";
+import orderRoutes from "./routes/OrderRoutes.js"
+import uploadRoutes from "./routes/UploadRoutes.js"
+import subscriberRoutes from "./routes/SubscriberRoutes.js"
+import adminRoutes from "./routes/AdminRoutes.js"
+import adminProductRoutes from './routes/ProductAdminRoutes.js'
+import adminOrderRoutes from "./routes/AdminOrderRoutes.js"
 app.use(express.json()); // Middleware to parse incoming JSON requests and make the data available in req.body
 app.use(cors()); // Middleware to enable Cross-Origin Resource Sharing (CORS), allowing frontend apps from different origins to access the backend
 dotenv.config();
@@ -21,6 +27,13 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
+app.use("/api/orders",orderRoutes)
+app.use("/api/upload",uploadRoutes)
+app.use("/api",subscriberRoutes)
+app.use("/api/admin/users",adminRoutes)
+app.use("/api/admin/products",adminProductRoutes)
+app.use("/api/admin/orders",adminOrderRoutes)
+
 app.listen(PORT, () => {
   console.log(`Sever is Running on ${PORT}`);
 });
