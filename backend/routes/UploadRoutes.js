@@ -1,9 +1,6 @@
 import express from "express"
 import multer from "multer"
 import { imageUploader } from "../controllers/UploadController.js"
-
-
-
 const router= express.Router()
 
 //Multer setUp using memory storage

@@ -2,7 +2,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const FilterSidebar = () => {
-const [searchParams, setSearchParams] = useSearchParams(); //e.g. ?category=Top%20Wear&gender=Men
+  const [searchParams, setSearchParams] = useSearchParams(); //e.g. ?category=Top%20Wear&gender=Men
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     category: "",
@@ -42,8 +42,18 @@ const [searchParams, setSearchParams] = useSearchParams(); //e.g. ?category=Top%
     const params = Object.fromEntries([...searchParams]);
     console.log(searchParams);
     console.log([...searchParams]);
-    
+    // [...searchParams]
+    // => [["category", "Top Wear"], ["gender", "Men"], ["size", "M,L"]]
     //[["category", "Top Wear"], ["gender", "Men"], ["color", "Red"]]
+    
+    //  Object.fromEntries(...) converts that into:
+
+    // {
+    //   category: "Top Wear",
+    //   gender: "Men",
+    //   size: "M,L"
+    // }
+
     setFilters({
       category: params.category || "",
       gender: params.gender || "",
