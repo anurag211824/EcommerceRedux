@@ -65,6 +65,8 @@ export const updateCartItemQuantity = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      console.log("hi");
+
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
         {
@@ -79,7 +81,7 @@ export const updateCartItemQuantity = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error(error);
-     return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -89,15 +91,22 @@ export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async ({ productId, guestId, userId, size, color }, { rejectWithValue }) => {
     try {
-      const response = await axios({
-        method: "DELETE",
-        url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-        data: { productId, guestId, userId, size, color },
-      });
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+        {
+          data: {
+            productId,
+            guestId,
+            userId,
+            size,
+            color,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error(error);
-     return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || "Something went wrong");
     }
   }
 );
@@ -122,7 +131,7 @@ export const mergeCart = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error(error);
-     return rejectWithValue(error.data.response);
+      return rejectWithValue(error.data.response);
     }
   }
 );
@@ -183,8 +192,8 @@ const cartSlice = createSlice({
       })
       .addCase(updateCartItemQuantity.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.payload?.message || "Failed to update the cart quantity";
+        state.error = action.payload.message;
+        action.payload?.message || "Failed to update the cart quantity";
       })
       // Remove From Cart
       .addCase(removeFromCart.pending, (state) => {
@@ -197,9 +206,11 @@ const cartSlice = createSlice({
         saveCartToStorage(action.payload);
       })
       .addCase(removeFromCart.rejected, (state, action) => {
+        console.log("Hiiii");
+
         state.loading = false;
-        state.error =
-          action.payload?.message || "Failed to remove item from the cart";
+        state.error = action.payload;
+        action.payload?.message || "Failed to remove item from the cart";
       })
 
       // Merge Cart

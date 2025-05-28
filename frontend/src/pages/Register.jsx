@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import register from "../assets/register.webp";
-import { registerUser } from "../redux/slices/Authslice";
+import { registerUser } from "../redux/slices/AuthSlice.js";
 import { useDispatch } from "react-redux";
 
 const Register = () => {

@@ -1,7 +1,12 @@
+/* eslint-disable react/prop-types */
 import {Link} from "react-router-dom"
-import PropTypes from "prop-types";
-
-const ProductGrid = ({ products }) => {
+const ProductGrid = ({ products ,loading, error }) => {
+  if(loading){
+    return <p>Loading....</p>
+  }
+  if(error){
+    return <p>Error:{error}</p>
+  }
   return (
     <div className="max-w-[1350px] mx-auto gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {products.map((product, index) => (
@@ -23,21 +28,6 @@ const ProductGrid = ({ products }) => {
   );
 };
 
-ProductGrid.propTypes = {
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      images: PropTypes.arrayOf(
-        PropTypes.shape({
-          url: PropTypes.string,
-          altText: PropTypes.string,
-        })
-      ),
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-    })
-  ),
-};
 
 
 

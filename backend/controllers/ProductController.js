@@ -148,12 +148,13 @@ const getAllProducts = async (req, res) => {
     } = req.query;
     let query = {};
     //Filter logic
-    if (collection && collection.toLocalLowerCase() !== "all") {
+    if (collection && collection.toLowerCase() !== "all") {
       query.collection = collection;
     }
-    if (category && category.toLocalLowerCase() !== "all") {
+    if (category && category.toLowerCase() !== "all") {
       query.category = category;
     }
+
     if (material) {
       query.material = { $in: material.split(",") };
     }
@@ -172,8 +173,16 @@ const getAllProducts = async (req, res) => {
     if (minPrice || maxPrice) {
       query.price = {};
       if (minPrice) query.price.$gte = Number(minPrice);
-      if (maxPrice) query.price.$lte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
     }
+    if (minPrice || maxPrice) {
+      const min = Number(minPrice);
+      const max = Number(maxPrice);
+      query.price = {};
+      if (!isNaN(min)) query.price.$gte = min;
+      if (!isNaN(max)) query.price.$lte = max;
+    }
+
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
@@ -208,22 +217,19 @@ const getAllProducts = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-const getBestSeller = async(req,res)=>{
-    try{
-      const bestSeller = await Product.findOne().sort({rating:-1})
-      if(bestSeller){
-        res.json(bestSeller)
-      }
-      else{
-        res.status(404).json({message:"No best seller found"})
-      }
+const getBestSeller = async (req, res) => {
+  try {
+    const bestSeller = await Product.findOne().sort({ rating: -1 });
+    if (bestSeller) {
+      res.json(bestSeller);
+    } else {
+      res.status(404).json({ message: "No best seller found" });
     }
-    catch(error){
-     console.error(error)
-     res.status(500).send("Server error")
-
-    }
-}
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
 const getSingleProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -240,33 +246,31 @@ const getSingleProduct = async (req, res) => {
 
 const getSimilarProducts = async (req, res) => {
   const { id } = req.params; // i sent id in path variables in postMan
-  try{
-   const product = await Product.findById(id)
-   if(!product){
-    return res.status(404).json({message:"Product not found"})
-   }
-   const similarProduct = await Product.find({
-    _id:{$ne:id}, //Exclude the current Product ID
-    gender:product.gender,
-    category:product.category
-   }).limit(4)
-   res.json(similarProduct)
-  }
-  catch(error){
-   console.error(error)
-   res.status(500).send("Server Error")
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    const similarProduct = await Product.find({
+      _id: { $ne: id }, //Exclude the current Product ID
+      gender: product.gender,
+      category: product.category,
+    }).limit(4);
+    res.json(similarProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
   }
 };
-const getNewArrivals = async(req,res) =>{
-    try{
-     const newArrivals = await Product.find().sort({createdAt:-1}).limit(8);
-     res.json(newArrivals)
-    }
-    catch(error){
-        console.error(error);
-        res.status(500).send("Server error")
-    }
-}
+const getNewArrivals = async (req, res) => {
+  try {
+    const newArrivals = await Product.find().sort({ createdAt: -1 }).limit(8);
+    res.json(newArrivals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
 export {
   createNewProduct,
   updateProduct,
@@ -275,5 +279,5 @@ export {
   getSingleProduct,
   getSimilarProducts,
   getBestSeller,
-  getNewArrivals
+  getNewArrivals,
 };

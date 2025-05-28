@@ -80,7 +80,7 @@ const updateCart = async (req, res) => {
   const { productId, quantity, size, color, guestId, userId } = req.body;
   try {
     let cart = await getCart(userId, guestId);
-    if (!cart) return res.status(404).json({ message: "Cart found" });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
     const productIndex = cart.products.findIndex(
       (p) =>
         p.productId.toString() === productId &&
@@ -111,6 +111,7 @@ const updateCart = async (req, res) => {
 };
 const removeProductFromCart = async (req, res) => {
   const { productId, size, color, guestId, userId } = req.body;
+ 
   try {
     const cart = await getCart(userId, guestId);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
@@ -123,7 +124,7 @@ const removeProductFromCart = async (req, res) => {
     if (productIndex > -1) {
       cart.products.splice(productIndex, 1);
       cart.totalPrice = cart.products.reduce(
-        (acc, item) => acc + item.price * item.quatity,
+        (acc, item) => acc + (item.price ?? 0) * (item.quantity ?? 0),
         0
       );
       await cart.save();
