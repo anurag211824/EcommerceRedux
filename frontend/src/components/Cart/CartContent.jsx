@@ -25,7 +25,8 @@ const CartContent = ({ cart, userId, guestId }) => {
     }
   };
   const handleRemoveFromCart = (productId, size, color) => {
-    console.log("hi");
+   console.log("Deleting",productId,size,color);
+
     
     dispatch(removeFromCart({ productId, guestId, userId, size, color }));
   };

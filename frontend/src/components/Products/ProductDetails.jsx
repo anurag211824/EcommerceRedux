@@ -39,30 +39,41 @@ const ProductDetails = ({ productId }) => {
     }
   };
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      toast.error("Please select a size and color", {
+  if (!selectedSize || !selectedColor) {
+    toast.error("Please select a size and color", {
+      duration: 1000,
+    });
+    return;
+  }
+
+  setIsButtonDisabled(true);
+
+  dispatch(
+    addToCart({
+      productId: productFetchId,
+      quantity,
+      size: selectedSize,
+      color: selectedColor,
+      guestId,
+      userId: user?._id,
+    })
+  )
+    .then(() => {
+      toast.success("Product Added to cart!", {
         duration: 1000,
       });
-      return;
-    }
-    setIsButtonDisabled(true);
-    dispatch(
-      addToCart({
-        productId: productFetchId,
-        quantity,
-        size: selectedSize,
-        color: selectedColor,
-        guestId,
-        userId: user?._id,
-      })
-    ).then(() => {
-      toast
-        .success("Product Added to cart!", {
-          duration: 1000,
-        })
-       
+    })
+    .catch(() => {
+      toast.error("Failed to add product", {
+        duration: 1000,
+      });
+    })
+    .finally(() => {
+      // Re-enable the button after completion
+      setIsButtonDisabled(false);
     });
-  };
+};
+
     useEffect(() => {
     if (selectedProduct?.images?.length > 0) {
       setMainImage(selectedProduct.images[0].url);

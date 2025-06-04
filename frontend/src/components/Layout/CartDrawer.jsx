@@ -51,7 +51,7 @@ const CartDrawer = ({ drawerOpen, toggleCartDrawer }) => {
             <>
               <button
                 className="w-full bg-black text-white py-2 rounded-md mb-2"
-                onClick={() => handleCheckout}
+                onClick={handleCheckout}
               >
                 Checkout
               </button>

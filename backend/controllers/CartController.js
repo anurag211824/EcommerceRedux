@@ -111,16 +111,26 @@ const updateCart = async (req, res) => {
 };
 const removeProductFromCart = async (req, res) => {
   const { productId, size, color, guestId, userId } = req.body;
- 
+  console.log(req.body);
   try {
     const cart = await getCart(userId, guestId);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
-    const productIndex = cart.products.findIndex(
-      (p) =>
-        p.productId.toString() === productId &&
-        p.size === size &&
-        p.color === color
-    );
+   const productIndex = cart.products.findIndex((p, i) => {
+  console.log(`Checking product ${i}:`);
+  console.log("DB:", {
+    productId: p.productId.toString(),
+    size: p.size,
+    color: p.color,
+  });
+  console.log("Incoming:", { productId, size, color });
+
+  return (
+    p.productId?.toString() === productId &&
+    p.size?.toLowerCase() === size.toLowerCase() &&
+    p.color?.toLowerCase() === color.toLowerCase()
+  );
+});
+
     if (productIndex > -1) {
       cart.products.splice(productIndex, 1);
       cart.totalPrice = cart.products.reduce(

@@ -201,6 +201,8 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, action) => {
+        console.log("fullfilled");
+        
         state.loading = false;
         state.cart = action.payload;
         saveCartToStorage(action.payload);
