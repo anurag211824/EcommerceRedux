@@ -13,7 +13,7 @@ import subscriberRoutes from "./routes/SubscriberRoutes.js"
 import adminRoutes from "./routes/AdminRoutes.js"
 import adminProductRoutes from './routes/ProductAdminRoutes.js'
 import adminOrderRoutes from "./routes/AdminOrderRoutes.js"
-import userRoutes from "./routes/UserRoutes.js";
+import userRoutes from "./routes/TestUserRoutes.js";
 app.use(express.json()); // Middleware to parse incoming JSON requests and make the data available in req.body
 app.use(cors()); // Middleware to enable Cross-Origin Resource Sharing (CORS), allowing frontend apps from different origins to access the backend
 dotenv.config();
