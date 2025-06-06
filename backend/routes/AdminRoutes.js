@@ -1,12 +1,12 @@
 import express from "express"
 import { protect,adminAuth } from "../middleware/AuthMiddleware.js";
-import { addUser, deleteUser, getAllUers, updateUser } from "../controllers/AdminControllers.js";
+import { addUser, deleteUser, getAllUsers, updateUser } from "../controllers/AdminControllers.js";
 const router = express.Router();
 
 // @route GET /api/admin/users
 // @description Get all the users
 // @access Private admin only
-router.get("/",protect,adminAuth,getAllUers);
+router.get("/",protect,adminAuth,getAllUsers);
 
 // @route POST /api/admin/users
 // @description Add a new users (admin only)

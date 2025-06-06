@@ -1,39 +1,31 @@
-import { useState } from "react";
+import { useEffect} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchAllOrders, updateOrderStatus } from "../../redux/slices/AdminOrderSlice";
 
 const OrderManagement = () => {
-  const [orders, setOrders] = useState([
-    {
-      _id: "67540ced3376121b361a0ed0",
-      user: { name: "Admin User" },
-      totalPrice: 199.96,
-      status: "Processing",
-    },
-    {
-      _id: "67540d3ca67b4a70e434e092",
-      user: { name: "Admin User" },
-      totalPrice: 40,
-      status: "Processing",
-    },
-    {
-      _id: "675bf2c6ca77bd83eefd7a1b",
-      user: { name: "Admin User" },
-      totalPrice: 39.99,
-      status: "Processing",
-    },
-    {
-      _id: "675c24b09b8827304bd50cc1",
-      user: { name: "Admin User" },
-      totalPrice: 39.99,
-      status: "Processing",
-    },
-  ]);
+ const dispatch = useDispatch()
+ const naviagte = useNavigate()
+ const {user}  = useSelector((state)=>state.auth)
+ const {orders,loading,error} = useSelector((state)=>state.adminOrders)
+ useEffect(()=>{
+  if(!user || user.role !=="admin"){
+    naviagte("/");
+  }
+  else{
+    dispatch(fetchAllOrders())
+  }
+ },[dispatch,user,naviagte])
 
-  const handleStatusChange = (index, newStatus) => {
-    const updatedOrders = [...orders];
-    updatedOrders[index].status = newStatus;
-    setOrders(updatedOrders);
+  const handleStatusChange = (orderId, newStatus) => {
+   dispatch(updateOrderStatus({id:orderId,newStatus}))
   };
-
+  if(loading){
+    return <p>Loading.....</p>
+  }
+  if(error){
+    return <p>Error:{error}</p>
+  }
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-6">Order Management</h1>

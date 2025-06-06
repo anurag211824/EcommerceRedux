@@ -1,8 +1,13 @@
 import User from "../models/User.js";
 
-const getAllUers = async (req, res) => {
+const getAllUsers = async (req, res) => {
+
+  console.log(req);
+  
   try {
     const users = await User.find({});
+    console.log(users);
+    
     res.json(users);
   } catch (error) {
     console.error(error);
@@ -11,6 +16,8 @@ const getAllUers = async (req, res) => {
 };
 const addUser = async (req, res) => {
   const { name, email, password, role } = req.body;
+  console.log(req.body);
+  
   try {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "user already exits" });
@@ -64,4 +71,4 @@ const deleteUser = async(req,res) =>{
     res.status(500).json({message:"Server Error"})
   }
 }
-export { getAllUers, addUser,updateUser,deleteUser };
+export { getAllUsers, addUser,updateUser,deleteUser };

@@ -13,10 +13,14 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+console.log("Cloudinary config:", cloudinary.config());
 
 // This defines an asynchronous Express.js controller function named imageUploader, 
 // intended to handle image upload requests.
 const imageUploader = async (req, res) => {
+    console.log("Upload route hit");
+    console.log("Received file:", req.file);
+
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });

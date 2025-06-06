@@ -12,7 +12,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, guestId } = useSelector((state) => state.auth);
+  const { user, guestId, loading } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
 
   // Get redirect parameter and check if its checkout or something else
@@ -33,7 +33,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUser({ name, email, password }));
-    navigate("/")
+    navigate("/");
   };
   return (
     <div className="flex">
@@ -99,11 +99,14 @@ const Register = () => {
             type="submit"
             className="w-full p-2 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition"
           >
-            Sign Up
+           {loading ? "loading":"Sign Up"}
           </button>
           <p className="mt-6 text-center text-sm">
             Do you have an account ?
-            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-blue-500">
+            <Link
+              to={`/login?redirect=${encodeURIComponent(redirect)}`}
+              className="text-blue-500"
+            >
               {" "}
               Login
             </Link>

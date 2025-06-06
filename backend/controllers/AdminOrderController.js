@@ -12,7 +12,7 @@ const getAdminOrders = async (req, res) => {
 
 const updateOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate("user","name");
     if (order) {
       order.status = req.body.status || order.status;
       order.isDelivered =

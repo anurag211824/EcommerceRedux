@@ -1,29 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+console.log("Token:", localStorage.getItem("userToken"));
 
-//Fetch all uers (admin only)
+// Fetch all users (admin only)
 export const fetchUsers = createAsyncThunk("admin/fetchUsers", async () => {
+
+
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/admin/users`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-        },
-      }
-    );
+    const response = await axios.get(
+  `${import.meta.env.VITE_BACKEND_URL}/api/admin/users`,
+  {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+    },
+  }
+);
+
+    console.log("Fetched users:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
-    throw error; // Let createAsyncThunk handle the rejection
+    throw error;
   }
 });
 
-//Add the create user action
+// Add user
 export const addUser = createAsyncThunk(
   "admin/addUser",
   async (userData, { rejectWithValue }) => {
+    console.log("Sending user data:", userData);
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/users`,
@@ -41,7 +47,7 @@ export const addUser = createAsyncThunk(
   }
 );
 
-// Update the users Info
+// Update user
 export const updateUser = createAsyncThunk(
   "admin/updateUser",
   async ({ id, name, email, role }) => {
@@ -58,7 +64,7 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-// Delete a user
+// Delete user
 export const deleteUser = createAsyncThunk("admin/deleteUser", async (id) => {
   await axios.delete(
     `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
@@ -81,7 +87,7 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // fetch users
+      // Fetch users
       .addCase(fetchUsers.pending, (state) => {
         state.loading = true;
       })
@@ -90,42 +96,43 @@ const adminSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
+        console.log("khtm");
+        
         state.loading = false;
         state.error = action.error.message;
       })
-      // update users
-      //   .addCase(updateUser.pending, (state) => {
-      //     state.loading = true;
-      //   })
+
+      // Add user
+      .addCase(addUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addUser.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload && action.payload.user) {
+          state.users.push(action.payload.user); // ✅ Correct use of push
+        }
+      })
+      .addCase(addUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to add user";
+      })
+
+      // Update user
       .addCase(updateUser.fulfilled, (state, action) => {
         const updatedUser = action.payload;
         const userIndex = state.users.findIndex(
           (user) => user._id === updatedUser._id
         );
         if (userIndex !== -1) {
-          state.users[userIndex] = updateUser;
+          state.users[userIndex] = updatedUser; // ✅ Correct update
         }
         state.loading = false;
       })
-      //   .addCase(updateUser.rejected, (state, action) => {
-      //     state.loading = false;
-      //     state.error = action.error.message;
-      //   });
 
+      // Delete user
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.users = state.users.filter((user) => user._id !== action.payload);
-      })
-      .addCase(addUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(addUser.fulfilled, (state, action) => {
-        state.loading = true;
-        state.users = state.users.push(action.payload.user);
-      })
-      .addCase(addUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
       });
   },
 });

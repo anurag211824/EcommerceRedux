@@ -1,58 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  addUser,
+  deleteUser,
+  fetchUsers,
+  updateUser,
+} from "../../redux/slices/AdminSlice";
 
 const UserManagement = () => {
-  const users = [
-    {
-      _id: 1,
-      name: "John Doe",
-      email: "john@gmail.com",
-      role: "admin",
-    },
-    {
-      _id: 2,
-      name: "Jane Smith",
-      email: "jane.smith@example.com",
-      role: "customer",
-    },
-    {
-      _id: 3,
-      name: "Michael Johnson",
-      email: "michael.j@example.com",
-      role: "customer",
-    },
-  ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const { users, loading, error } = useSelector((state) => state.admin);
+  console.log("users from Redux:", users);
 
-  const [fromData, setFormData] = useState({
+  useEffect(() => {
+    if (user && user.role !== "admin") {
+      navigate("/");
+    }
+       dispatch(fetchUsers());
+  }, [user, navigate, dispatch]);
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "customer", //Default
+    role: "customer", 
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...fromData, [name]: value });
-    console.log(fromData);
+    setFormData({ ...formData, [name]: value });
+    console.log(formData);
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(fromData);
+  const handleSubmit = async (event) => {
+  event.preventDefault();
+  const result = await dispatch(addUser(formData));
+
+  if (addUser.fulfilled.match(result)) {
+    dispatch(fetchUsers());
     setFormData({
       name: "",
       email: "",
       password: "",
       role: "customer",
     });
-  };
-  const handleRoleChange = (userId, newRole) => {
-    console.log({ id: userId, role: newRole });
-  };
-  const handleDeleteuser = (userId)=>{
-   if(window.confirm("Are you sure you want to delete this user ?"))
-    console.log("deleting user with userId",userId);
   }
+};
+
+const handleRoleChange = async (userId, newRole) => {
+  const result = await dispatch(updateUser({ id: userId, role: newRole }));
+
+  if (updateUser.fulfilled.match(result)) {
+    dispatch(fetchUsers()); // refresh the updated list
+  }
+};
+
+  const handleDeleteuser = (userId) => {
+    if (window.confirm("Are you sure you want to delete this user ?"))
+      dispatch(deleteUser(userId));
+  };
   return (
     <div className="max-w-[1000px] mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">User Mangement</h2>
+      {loading && <p>Loading.....</p>}
+      {error && <p>Error: {error}</p>}
       {/* Add New user Form */}
       <div className="p-6 mb-6 rounded-lg">
         <h3 className="text-lg font-bold mb-4">Add New User</h3>
@@ -65,7 +76,7 @@ const UserManagement = () => {
               type="text"
               name="name"
               id="name"
-              value={fromData.name}
+              value={formData.name}
               onChange={handleChange}
               className="w-[80%] p-2 border rounded"
             />
@@ -77,8 +88,8 @@ const UserManagement = () => {
             <input
               type="email"
               name="email"
-              id="name"
-              value={fromData.email}
+              id="email"
+              value={formData.email}
               onChange={handleChange}
               className="w-[80%] p-2 border rounded"
             />
@@ -90,8 +101,8 @@ const UserManagement = () => {
             <input
               type="password"
               name="password"
-              id="name"
-              value={fromData.password}
+              id="password"
+              value={formData.password}
               onChange={handleChange}
               className="w-[80%] p-2 border rounded"
             />
@@ -102,7 +113,7 @@ const UserManagement = () => {
             </label>
             <select
               name="role"
-              value={fromData.role}
+              value={formData.role}
               id="role"
               onChange={handleChange}
               className="w-[80%] p-2 border rounded"
@@ -150,7 +161,10 @@ const UserManagement = () => {
                   </select>
                 </td>
                 <td className="p-4">
-                  <button className="bg-red-500 text-white px-4 py-2 hover:bg-red-600" onClick={() => handleDeleteuser(user._id)}>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 hover:bg-red-600"
+                    onClick={() => handleDeleteuser(user._id)}
+                  >
                     Delete
                   </button>
                 </td>

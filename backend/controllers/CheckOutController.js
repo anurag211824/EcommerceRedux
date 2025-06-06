@@ -5,6 +5,8 @@ import Order from "../models/Order.js";
 const createCheckout = async (req, res) => {
   const { checkoutItems, shippingAddress, paymentMethod, totalPrice } =
     req.body;
+    console.log(checkoutItems);
+    
 
   if (!checkoutItems || checkoutItems.length === 0) {
     return res.status(400).json({ message: "No item in checkout" });

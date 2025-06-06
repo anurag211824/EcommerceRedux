@@ -3,7 +3,7 @@ import axios from "axios";
 // Async thunk to create a checkout session
 export const createCheckout = createAsyncThunk(
   "checkout/createCheckout",
-  async ({ checkoutdata }, { rejectWithValue }) => {
+  async (checkoutdata, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
@@ -17,7 +17,9 @@ export const createCheckout = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error(error);
-      return rejectWithValue(error.message.data);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "Something went wrong"
+      );
     }
   }
 );
@@ -37,15 +39,14 @@ const checkoutSlice = createSlice({
         state.error = null;
       })
       .addCase(createCheckout.fulfilled, (state, action) => {
-        state.loading = false,
+        state.loading = false;
         state.checkout = action.payload;
       })
       .addCase(createCheckout.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = action.payload || "Checkout failed";
       });
   },
 });
 
-
-export  default checkoutSlice.reducer
+export default checkoutSlice.reducer;

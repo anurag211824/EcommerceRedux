@@ -1,98 +1,23 @@
-import { useState, useEffect } from "react";
+import {useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchUserOrders } from "../redux/slices/OrderSlice";
 const MyOrdersPage = () => {
-  const [orders, setOrders] = useState([]);
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  useEffect(() => {
-    // simulate fetching orders
-    setTimeout(() => {
-      const mockOrders = [
-        {
-          _id: "12345",
-          createdAt: new Date(),
-          shippingAddress: { city: "New York", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 1",
-              image: "https://picsum.photos/500/500?random=1",
-            },
-          ],
-          totalPrice: 100,
-          isPaid: true,
-        },
-        {
-          _id: "12346",
-          createdAt: new Date(),
-          shippingAddress: { city: "Los Angeles", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 2",
-              image: "https://picsum.photos/500/500?random=2",
-            },
-          ],
-          totalPrice: 120,
-          isPaid: false,
-        },
-        {
-          _id: "12347",
-          createdAt: new Date(),
-          shippingAddress: { city: "Chicago", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 3",
-              image: "https://picsum.photos/500/500?random=3",
-            },
-          ],
-          totalPrice: 90,
-          isPaid: true,
-        },
-        {
-          _id: "12348",
-          createdAt: new Date(),
-          shippingAddress: { city: "Houston", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 4",
-              image: "https://picsum.photos/500/500?random=4",
-            },
-          ],
-          totalPrice: 150,
-          isPaid: false,
-        },
-        {
-          _id: "12349",
-          createdAt: new Date(),
-          shippingAddress: { city: "Phoenix", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 5",
-              image: "https://picsum.photos/500/500?random=5",
-            },
-          ],
-          totalPrice: 75,
-          isPaid: true,
-        },
-        {
-          _id: "12350",
-          createdAt: new Date(),
-          shippingAddress: { city: "Philadelphia", country: "USA" },
-          orderItems: [
-            {
-              name: "Product 6",
-              image: "https://picsum.photos/500/500?random=6",
-            },
-          ],
-          totalPrice: 110,
-          isPaid: false,
-        },
+  const {orders,loading,error}  = useSelector((state)=>state.orders)
+  useEffect(()=>{
+    dispatch( fetchUserOrders())
+  },[dispatch])
 
-       
-      ];
-      setOrders(mockOrders);
-    });
-  }, []);
    const handleRowClick = (id)=>{
       navigate(`/order/${id}`)
+    }
+    if(loading){
+      return <p>Loading...</p>
+    }
+    if(error){
+      return <p>Error:{error}</p>
     }
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">

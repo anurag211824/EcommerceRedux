@@ -1,45 +1,28 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-const products = [
-  {
-    _id: 1,
-    name: "Printed Resort Shirt",
-    price: "$29.99",
-    sku: "PRNT-RES-004",
-  },
-  { _id: 2, name: "Chino Pants", price: "$55", sku: "BW-005" },
-  { _id: 3, name: "Cargo Pants", price: "$50", sku: "BW-008" },
-  {
-    _id: 4,
-    name: "Long-Sleeve Thermal Tee",
-    price: "$27.99",
-    sku: "LST-THR-009",
-  },
-  { _id: 5, name: "Pleated M_idi Skirt", price: "$55", sku: "BW-W-004" },
-  { _id: 6, name: "Graphic Print Tee", price: "$30", sku: "TW-W-006" },
-  { _id: 7, name: "Ribbed Long-Sleeve Top", price: "$55", sku: "TW-W-007" },
-  {
-    _id: 8,
-    name: "Slim-Fit Stretch Shirt",
-    price: "$29.99",
-    sku: "SLIM-SH-002",
-  },
-  { _id: 9, name: "Cargo Joggers", price: "$45", sku: "BW-002" },
-  { _id: 10, name: "Off-Shoulder Top", price: "$45", sku: "TW-W-004" },
-  {
-    _id: 11,
-    name: "Slim-Fit Easy-Iron Shirt",
-    price: "$34.99",
-    sku: "SLIM-EIR-005",
-  },
-  { _id: 12, name: "Tapered Sweatpants", price: "$35", sku: "BW-003" },
-];
+import { deleteProduct, fetchAdminProducts } from "../../redux/slices/AdminProductSlice";
+
 
 const ProductManagement = () => {
+  const dispatch = useDispatch()
+  const {products,loading,error}  = useSelector((state)=>state.adminProducts)
+  useEffect(()=>{
+    dispatch(fetchAdminProducts())
+  },[dispatch])
   const handleDelete = (productId) => {
     if (window.confirm("Are you sure you wnat to delete this product")) {
-      console.log(productId, "product getting deleted");
+      console.log(productId);
+      
+      dispatch(deleteProduct(productId))
     }
   };
+   if(loading){
+    return <p>Loading.....</p>
+  }
+  if(error){
+    return <p>Error:{error}</p>
+  }
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Product Management</h1>
