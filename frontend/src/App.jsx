@@ -24,6 +24,7 @@ const App = () => {
   return (
     <>
       <Provider store={store}>
+        {/*BrwoserRouter is a router component that uses the HTML5 history API. */}
         <BrowserRouter>
           <Toaster position="top-right" />
           <Routes>
@@ -33,28 +34,15 @@ const App = () => {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="profile" element={<Profile />} />
-              <Route
-                path="collections/:collection"
-                element={<CollectionPage />}
-              ></Route>
+              <Route path="collections/:collection" element={<CollectionPage />}/>
               <Route path="product/:id" element={<ProductDetails />} />
               <Route path="checkout" element={<CheckOut />} />
-              <Route
-                path="order-confirmation"
-                element={<OrderConfirmationPage />}
-              />
+              <Route path="order-confirmation" element={<OrderConfirmationPage />}/>
               <Route path="order/:id" element={<OrdersDetailsPage />} />
               <Route path="my-orders" element={<MyOrdersPage />} />
             </Route>
             {/* Admin Layout */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute role="admin">
-                  <AdminLayout />
-                </ProtectedRoute>
-              }
-            >
+            <Route path="/admin" element={<ProtectedRoute role="admin"> <AdminLayout /> </ProtectedRoute>}>
               <Route index element={<AdminHomePage />} />
               <Route path="users" element={<UserManagement />} />
               <Route path="products" element={<ProductManagement />} />
