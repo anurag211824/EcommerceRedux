@@ -17,6 +17,9 @@ const NewArrivals = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
         );
         setNewArrivals(response.data)
+        console.log('====================================');
+        console.log("HIIII");
+        console.log('====================================');
       } catch (error) {
         console.error(error)
 
