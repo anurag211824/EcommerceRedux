@@ -79,7 +79,8 @@ const loginUser = async (req, res) => {
 
 // User Profile Logic
 const userProfile = async (req, res) => {
-  console.log(req.user.id);
+  console.log("Hiii")
+  // console.log(req.user.id);
   res.json(req.user);
 };
 

@@ -13,7 +13,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-console.log("Cloudinary config:", cloudinary.config());
+//console.log("Cloudinary config:", cloudinary.config());
 
 // This defines an asynchronous Express.js controller function named imageUploader, 
 // intended to handle image upload requests.
