@@ -104,7 +104,7 @@ const Footer = () => {
       </div>
       {/* Footer Bottom */}
       <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6">
-        <p className="text-gray-500  text-sm tracking-tighter text-center">@ 2025,Rabbit, All Rights Reserved</p>
+        <p className="text-gray-500  text-sm tracking-tighter text-center">@ 2025,Zyra, All Rights Reserved</p>
       </div>
     </footer>
   );

@@ -26,7 +26,7 @@ const Navbar = () => {
         {/* Left-log */}
         <div>
           <Link to="/" className="text-2xl font-medium">
-            Rabbit
+      Zyra
           </Link>
         </div>
         {/* Center Navigtaion links */}
