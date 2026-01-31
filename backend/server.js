@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000;
 connectDb();
 
 app.get("/", (req, res) => {
-  res.send("welcome to Rabbit");
+  res.send("welcome to zyra");
 });
 //API Routes
 app.use("/api/users", userRoutes);

@@ -28,7 +28,7 @@ const EditProductPage = () => {
   });
   const [uploading, setUploading] = useState(false);
   useEffect(() => {
-    if (id) {
+    if (id) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
       dispatch(fetchProductDetails(id));
     }
   }, [dispatch, id]);

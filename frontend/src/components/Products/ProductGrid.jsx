@@ -14,6 +14,7 @@ const ProductGrid = ({ products ,loading, error }) => {
           <div className="bg-white p-4 rounded-lg">
             <div className="w-full h-96 mb-4">
               <img
+                draggable="true"
                 src={product.images[0]?.url ?? "fallback-image-url.jpg"}
                 alt={product.images[0]?.altText || product.name}
                 className="w-full h-full object-cover rounded-md"
