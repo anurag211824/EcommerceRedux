@@ -20,7 +20,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:3000",
-      "https://ecommerce-redux-beige.vercel.app/"
+      "https://ecommerce-redux-beige.vercel.app"
     ],
     credentials: true,
   })
