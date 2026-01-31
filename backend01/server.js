@@ -15,7 +15,16 @@ import adminProductRoutes from './routes/ProductAdminRoutes.js'
 import adminOrderRoutes from "./routes/AdminOrderRoutes.js"
 
 app.use(express.json()); // Middleware to parse incoming JSON requests and make the data available in req.body
-app.use(cors()); // Middleware to enable Cross-Origin Resource Sharing (CORS), allowing frontend apps from different origins to access the backend
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://ecommerce-redux-beige.vercel.app/"
+    ],
+    credentials: true,
+  })
+); // Middleware to enable Cross-Origin Resource Sharing (CORS), allowing frontend apps from different origins to access the backend
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 connectDb();
